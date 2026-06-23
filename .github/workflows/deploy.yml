@@ -1,0 +1,32 @@
+name: Build and Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]  # Change "main" to "master" if that is your default branch
+
+permissions:
+  contents: write  # Allows the action to write to your repository
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'  # Use your project's Node version
+
+      - name: Install Dependencies
+        run: npm ci  # Use 'yarn install' if you use Yarn
+
+      - name: Build Project
+        run: npm run build  # Use 'yarn build' if you use Yarn
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist  # ⚠️ IMPORTANT: Change this to your build folder name!
+          branch: gh-pages # The deployment branch (GitHub Actions will create this)
